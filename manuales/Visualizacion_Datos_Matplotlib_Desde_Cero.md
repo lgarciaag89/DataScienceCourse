@@ -95,6 +95,8 @@ plt.grid(True, alpha=0.3)
 plt.show()
 ```
 
+![alt text](images/example_line.png)
+
 Este ejemplo crea una línea con puntos. Es la base para entender cómo funciona Matplotlib.
 
 ---
@@ -182,12 +184,41 @@ plt.grid(True, alpha=0.3)
 plt.show()
 ```
 
+![alt text](images/line_ventas.png)
+
 ### Interpretación
 
 El gráfico de líneas es ideal para responder preguntas como:
 - ¿La variable aumenta o disminuye?
 - ¿Hay una tendencia clara?
 - ¿Hay cambios bruscos en el tiempo?
+
+### Modificar los valores de los ticks del eje X
+
+Los *ticks* son las marcas y etiquetas que aparecen en los ejes. Podemos
+seleccionar qué valores mostrar y cambiar el texto de sus etiquetas:
+
+```python
+import matplotlib.pyplot as plt
+
+x = [0, 1, 2, 3, 4, 5]
+y = [10, 14, 13, 18, 21, 20]
+
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.plot(x, y, marker='o')
+ax.set_xticks([0, 2, 4])
+ax.set_xticklabels(['Inicio', 'Mitad', 'Final'])
+ax.set_xlabel('Momento del experimento')
+ax.set_ylabel('Medición')
+ax.set_title('Personalización de los ticks del eje X')
+plt.show()
+```
+
+También es posible rotar las etiquetas cuando son largas:
+
+```python
+ax.tick_params(axis='x', rotation=45)
+```
 
 ---
 
@@ -213,6 +244,8 @@ plt.xticks(rotation=20)
 plt.tight_layout()
 plt.show()
 ```
+
+![alt text](images/barras.png)
 
 ### Interpretación
 
@@ -248,6 +281,8 @@ plt.ylabel('Frecuencia')
 plt.show()
 ```
 
+![alt text](images/histograma.png)
+
 ### Interpretación
 
 Un histograma ayuda a responder preguntas como:
@@ -280,6 +315,7 @@ plt.ylabel('Variable Y')
 plt.grid(True, alpha=0.3)
 plt.show()
 ```
+![alt text](images/dispercion.png)
 
 ### Interpretación
 
@@ -293,42 +329,7 @@ Es un gráfico clave en análisis exploratorio.
 
 ---
 
-## 11. Boxplot
-
-### ¿Cuándo usarlo?
-
-Se usa para comparar distribuciones y detectar valores atípicos.
-
-### Ejemplo
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-grupo1 = np.random.normal(10, 2, 200)
-grupo2 = np.random.normal(12, 3, 200)
-grupo3 = np.random.normal(9, 4, 200)
-
-plt.figure(figsize=(10, 6))
-plt.boxplot([grupo1, grupo2, grupo3], labels=['Grupo 1', 'Grupo 2', 'Grupo 3'])
-plt.title('Comparación de distribuciones')
-plt.ylabel('Valores')
-plt.show()
-```
-
-### Interpretación
-
-Un boxplot muestra:
-- Mediana
-- Cuartiles
-- Rango intercuartílico
-- Valores atípicos
-
-Es muy útil para comparar varios grupos a la vez.
-
----
-
-## 12. Gráfico circular (pie chart)
+## 11. Gráfico circular (pie chart)
 
 ### ¿Cuándo usarlo?
 
@@ -349,6 +350,8 @@ plt.axis('equal')
 plt.show()
 ```
 
+![alt text](images/pie.png)
+
 ### Interpretación
 
 Los gráficos circulares muestran partes de un total, pero solo son útiles cuando:
@@ -360,7 +363,7 @@ Los gráficos circulares muestran partes de un total, pero solo son útiles cuan
 
 ---
 
-## 13. Múltiples subgráficos
+## 12. Múltiples subgráficos
 
 ### ¿Cuándo usarlo?
 
@@ -392,15 +395,96 @@ plt.tight_layout()
 plt.show()
 ```
 
+![alt text](images/subgraficos.png)
+
 ### Interpretación
 
 Los subgráficos son muy útiles para:
 - Comparar varias perspectivas del mismo problema
 - Mostrar distintos tipos de análisis en una sola figura
 - Presentaciones y reportes
+
 ---
 
-## 14. Cómo elegir el gráfico correcto
+## 13. Boxplot
+
+Este será el último gráfico de la sección dedicada a resumir distribuciones.
+
+### ¿Cuándo usarlo?
+
+Se usa para comparar distribuciones y detectar valores atípicos.
+
+### Ejemplo
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+grupo1 = np.random.normal(10, 2, 200)
+grupo2 = np.random.normal(12, 3, 200)
+grupo3 = np.random.normal(9, 4, 200)
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.boxplot([grupo1, grupo2, grupo3], labels=['Grupo 1', 'Grupo 2', 'Grupo 3'])
+ax.set_title('Comparación de distribuciones')
+ax.set_ylabel('Valores')
+plt.show()
+```
+
+![alt text](images/boxplot.png)
+
+### ¿Qué significa cada elemento?
+
+- **Mediana:** línea dentro de la caja; divide los datos en dos mitades.
+- **Primer cuartil (Q1):** borde inferior; deja por debajo el 25 % de los datos.
+- **Tercer cuartil (Q3):** borde superior; deja por debajo el 75 % de los datos.
+- **Caja:** contiene el 50 % central de las observaciones.
+- **Rango intercuartílico (IQR):** `Q3 - Q1`, representado por la altura de la caja.
+- **Bigotes:** valores extremos que no se consideran atípicos, normalmente dentro de `1.5 * IQR`.
+- **Puntos aislados:** valores atípicos según el criterio anterior.
+
+---
+
+## 14. Visualización de clusters
+
+Un gráfico de dispersión permite visualizar las etiquetas asignadas por un
+algoritmo de agrupamiento. En este ejemplo se simulan tres clusters.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(42)
+centros = [(2, 2), (7, 6), (8, 1)]
+datos = []
+etiquetas = []
+
+for etiqueta, (centro_x, centro_y) in enumerate(centros):
+    cluster = rng.normal(loc=(centro_x, centro_y), scale=0.8, size=(60, 2))
+    datos.append(cluster)
+    etiquetas.extend([etiqueta] * len(cluster))
+
+datos = np.vstack(datos)
+etiquetas = np.array(etiquetas)
+
+fig, ax = plt.subplots(figsize=(8, 6))
+scatter = ax.scatter(datos[:, 0], datos[:, 1], c=etiquetas, cmap='viridis', alpha=0.75)
+ax.set_title('Visualización de clusters')
+ax.set_xlabel('Variable 1')
+ax.set_ylabel('Variable 2')
+ax.legend(*scatter.legend_elements(), title='Cluster')
+plt.show()
+```
+
+![alt text](images/clusters.png)
+
+Los grupos separados sugieren comportamientos diferentes en las dos
+variables. Esta visualización ayuda a evaluar la separación, pero no
+sustituye métricas como *silhouette score*.
+
+---
+
+## 15. Cómo elegir el gráfico correcto
 
 La elección del gráfico depende de la pregunta que quieras responder.
 
@@ -424,7 +508,7 @@ La elección del gráfico depende de la pregunta que quieras responder.
 
 ---
 
-## 15. Buenas prácticas en Matplotlib
+## 16. Buenas prácticas en Matplotlib
 
 1. Usa títulos claros que expliquen el gráfico
 2. Etiqueta siempre los ejes
@@ -437,32 +521,118 @@ La elección del gráfico depende de la pregunta que quieras responder.
 
 ---
 
-## 16. Ejemplo práctico final
+## 17. Analizar las distribuciones de dos variables
+
+En este ejercicio se carga un `DataFrame` con dos columnas numéricas. Se
+visualiza la distribución de cada variable con histogramas y se comparan
+ambas mediante un diagrama de dispersión.
 
 ```python
+import pandas as pd
 import matplotlib.pyplot as plt
 
-meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul']
-ventas = [130, 150, 145, 175, 190, 210, 225]
-gastos = [80, 95, 100, 110, 125, 135, 140]
+df = pd.read_csv('datos.csv')
+variable_x = 'variable_1'
+variable_y = 'variable_2'
 
-plt.figure(figsize=(10, 6))
-plt.plot(meses, ventas, label='Ventas', color='blue', marker='o')
-plt.plot(meses, gastos, label='Gastos', color='red', marker='s')
-plt.title('Comparación de ventas y gastos')
-plt.xlabel('Mes')
-plt.ylabel('Monto')
-plt.legend()
-plt.grid(True, alpha=0.3)
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+axes[0].hist(df[variable_x].dropna(), bins=20, color='steelblue', edgecolor='white')
+axes[0].set_title(f'Distribución de {variable_x}')
+axes[0].set_xlabel(variable_x)
+axes[0].set_ylabel('Frecuencia')
+
+axes[1].hist(df[variable_y].dropna(), bins=20, color='darkorange', edgecolor='white')
+axes[1].set_title(f'Distribución de {variable_y}')
+axes[1].set_xlabel(variable_y)
+axes[1].set_ylabel('Frecuencia')
+
 plt.tight_layout()
+plt.show()
+
+fig, ax = plt.subplots(figsize=(7, 5))
+ax.scatter(df[variable_x], df[variable_y], alpha=0.7)
+ax.set_title(f'Relación entre {variable_x} y {variable_y}')
+ax.set_xlabel(variable_x)
+ax.set_ylabel(variable_y)
 plt.show()
 ```
 
-Este ejemplo muestra la lógica central de Matplotlib: con pocas líneas de código puedes construir información visual clara y útil.
+Para sacar conclusiones, observa la forma, concentración y sesgo de cada
+histograma, además de los valores atípicos y datos faltantes. En el scatter
+plot, revisa si existe una relación positiva, negativa o inexistente, si es
+lineal y si aparecen grupos diferenciados.
 
 ---
 
-## 17. Resumen
+## 18. Tips útiles de Matplotlib
+
+### `figsize`
+
+Define el tamaño de la figura en pulgadas: el primer valor es el ancho y el
+segundo la altura.
+
+```python
+plt.figure(figsize=(8, 5))  # horizontal
+plt.figure(figsize=(6, 6))  # cuadrada
+plt.figure(figsize=(5, 8))  # vertical
+```
+
+### `dpi`
+
+Controla la resolución. Para guardar imágenes para un reporte suele ser
+suficiente `dpi=150` o `dpi=300`; una resolución mayor produce archivos más
+grandes.
+
+```python
+plt.savefig('figura.png', dpi=300, bbox_inches='tight')
+```
+
+### `marker`
+
+Define la forma de los puntos en líneas o dispersión. Algunos valores útiles
+son `'o'` (círculo), `'s'` (cuadrado), `'^'` (triángulo) y `'x'` (equis).
+
+```python
+plt.plot(x, y, marker='o')
+```
+
+### `linewidth`
+
+Controla el grosor de las líneas. Valores entre `1` y `3` suelen funcionar
+bien en gráficos para pantalla.
+
+```python
+plt.plot(x, y, linewidth=2)
+```
+
+### `alpha`
+
+Controla la transparencia de un elemento gráfico. Su valor va de `0` a `1`:
+`0` es completamente transparente y `1` es completamente opaco. Un valor
+como `0.3` permite que la cuadrícula se vea sin distraer de los datos.
+
+```python
+plt.grid(True, alpha=0.3)
+plt.scatter(x, y, alpha=0.6)
+```
+
+### Colores y `colormap`
+
+Puedes usar nombres (`'navy'`), códigos hexadecimales (`'#1f77b4'`) o mapas
+de color. Usa mapas secuenciales para magnitudes y mapas categóricos para
+grupos.
+
+```python
+plt.plot(x, y, color='#1f77b4')
+plt.scatter(x, y, c=valores, cmap='viridis')
+```
+
+Algunos mapas comunes son `'viridis'`, `'plasma'`, `'coolwarm'` y `'tab10'`.
+La elección debe mantener suficiente contraste y ser legible.
+
+---
+
+## 19. Resumen
 
 Matplotlib es la base de la visualización en Python.
 
@@ -477,7 +647,7 @@ Si aprendes bien sus fundamentos, podrás crear la mayoría de visualizaciones q
 
 ---
 
-## 18. Siguiente paso recomendado
+## 20. Siguiente paso recomendado
 
 Lo más importante es practicar con los tipos de gráficos básicos:
 - líneas
@@ -490,11 +660,7 @@ Con esos cinco gráficos ya puedes comenzar a analizar la mayoría de conjuntos 
 
 ---
 
-## 19. Bibliografía / referencias
+## 21. Bibliografía / referencias
 
 - Matplotlib documentation: https://matplotlib.org/stable/contents.html
 - Documentación oficial de Python para visualización científica
-
----
-
-Si quieres, más adelante puedo hacerte una versión con ejercicios prácticos y datos reales para que lo puedas ejecutar en Jupyter Notebook.
