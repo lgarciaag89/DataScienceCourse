@@ -420,17 +420,28 @@ df['Incremento'] = df['Salario'] * 1.1
 
 #### Descripción
 
-La visualización de datos es crucial para:
-- Explorar y entender patrones
-- Comunicar resultados
-- Detectar anomalías
-- Tomar decisiones basadas en datos
+La visualización de datos consiste en convertir información numérica o tabular en gráficos que permitan:
+- Explorar patrones y tendencias
+- Detectar anomalías y valores atípicos
+- Comunicar resultados de manera clara
+- Tomar decisiones con base en evidencia
+
+En ciencia de datos, un buen gráfico no solo se ve bonito, sino que comunica la historia detrás de los datos.
 
 #### Conceptos principales
 
-1. **Exploración**: Entender la distribución y relaciones en los datos
-2. **Comunicación**: Crear gráficos claros para presentar hallazgos
-3. **Elección de gráficos**: Seleccionar el tipo adecuado según los datos
+1. **Exploración**: Entender la distribución, tendencia y relación entre variables
+2. **Comunicación**: Explicar hallazgos a otras personas
+3. **Elección de gráficos**: Seleccionar el tipo de gráfico correcto según la pregunta que se quiere responder
+4. **Interpretación**: Leer correctamente el eje, la escala, la tendencia y el contexto
+
+#### Regla general
+
+No todos los datos necesitan el mismo tipo de gráfico. Para decidir, conviene preguntarse:
+- ¿Estoy comparando categorías o valores numéricos?
+- ¿Quiero ver tendencia a lo largo del tiempo?
+- ¿Necesito saber la distribución de una variable?
+- ¿Estoy buscando relación entre dos variables?
 
 ---
 
@@ -438,124 +449,324 @@ La visualización de datos es crucial para:
 
 #### Descripción
 
-Matplotlib es la librería más popular para crear gráficos estáticos, animados e interactivos en Python.
+Matplotlib es la librería más utilizada en Python para crear gráficos 2D de alta calidad. Es la base de muchas visualizaciones estadísticas y científicas, y se usa tanto para análisis exploratorio como para entregar resultados finales en informes, artículos o presentaciones.
 
-#### Explicación
+Matplotlib es una herramienta muy flexible. Permite controlar casi todo el diseño del gráfico: colores, tamaños, leyendas, ejes, estilos de línea, marcadores, títulos y más.
 
-**¿Por qué Matplotlib?**
-- Amplia gama de tipos de gráficos
-- Alta personalización
-- Integración con Jupyter Notebooks
-- Publicable (calidad de artículos científicos)
+#### ¿Qué es Matplotlib?
 
-#### Ejemplos
+Matplotlib es una biblioteca de visualización desarrollada para Python. Su nombre viene de "MATLAB-like plotting" y fue diseñada para crear gráficos con una sintaxis muy cercana a la lógica de programación científica.
 
-**Gráfico de líneas:**
+La parte principal que usamos es:
 
 ```python
 import matplotlib.pyplot as plt
-import numpy as np
+```
+
+`plt` es el módulo que contiene las funciones para crear gráficos, controlar la figura y mostrarla en pantalla o guardarla en archivo.
+
+#### ¿Para qué sirve?
+
+Matplotlib sirve para:
+- Graficar datos de una o varias variables
+- Crear reportes visuales con calidad profesional
+- Generar figuras para papers, dashboards o presentaciones
+- Comparar distribuciones, tendencias y relaciones
+- Visualizar errores, corridas temporales, datos financieros, etc.
+
+#### ¿Cómo se utiliza?
+
+El flujo básico para crear un gráfico en Matplotlib es siempre el mismo:
+
+1. Importar la librería
+2. Preparar los datos
+3. Crear la figura
+4. Agregar el gráfico
+5. Personalizar etiquetas, títulos y estilo
+6. Mostrar o guardar la figura
+
+#### Ejemplo básico
+
+```python
+import matplotlib.pyplot as plt
 
 # Datos
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+x = [1, 2, 3, 4, 5]
+y = [10, 15, 13, 18, 20]
 
-# Crear gráfico
+# Crear figura
+plt.figure(figsize=(8, 5))
+
+# Graficar
+plt.plot(x, y, color='royalblue', linewidth=2, marker='o')
+
+# Etiquetas y título
+plt.title('Evolución de una variable')
+plt.xlabel('Tiempo')
+plt.ylabel('Valor')
+plt.grid(True, alpha=0.3)
+
+# Mostrar gráfico
+plt.show()
+```
+
+#### Elementos esenciales de un gráfico
+
+En Matplotlib, los elementos más básicos son:
+- `figure`: la ventana o lienzo donde se dibuja
+- `plot()`: crea líneas
+- `scatter()`: crea puntos dispersos
+- `bar()`: crea barras
+- `hist()`: crea histogramas
+- `xlabel()`, `ylabel()`: etiquetas de ejes
+- `title()`: título del gráfico
+- `legend()`: leyenda
+- `grid()`: cuadrícula
+- `tight_layout()`: ajusta los espacios
+- `savefig()`: guarda la figura como imagen
+
+#### Guardar un gráfico
+
+```python
+plt.figure(figsize=(8, 5))
+plt.plot([1, 2, 3, 4], [5, 6, 7, 8])
+plt.title('Gráfico guardado')
+plt.savefig('mi_grafico.png', dpi=300)
+plt.show()
+```
+
+Esto guarda la imagen en la carpeta actual con nombre `mi_grafico.png`.
+
+#### Gráficos más relevantes en análisis de datos
+
+A continuación se muestran los tipos de gráficos más útiles para trabajar con datos en ciencia de datos, usando solo Matplotlib.
+
+### 2.4.1 Gráfico de líneas
+
+Se usa cuando queremos ver tendencias a lo largo del tiempo o evolución de una variable.
+
+```python
+import matplotlib.pyplot as plt
+
+meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun']
+ventas = [120, 150, 140, 180, 210, 195]
+
 plt.figure(figsize=(10, 6))
-plt.plot(x, y, label='sin(x)', color='blue', linewidth=2)
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Función Seno')
-plt.legend()
+plt.plot(meses, ventas, color='darkgreen', marker='o', linewidth=2)
+plt.title('Ventas mensuales')
+plt.xlabel('Mes')
+plt.ylabel('Ventas')
 plt.grid(True, alpha=0.3)
 plt.show()
 ```
 
-**Gráfico de barras:**
+**Cuándo usarlo**:
+- Series de tiempo
+- Tendencias
+- Comparación de evolución en varias líneas
+
+### 2.4.2 Gráfico de barras
+
+Se usa para comparar cantidades entre categorías.
 
 ```python
-# Datos
-categorias = ['Ventas', 'IT', 'HR', 'Marketing']
-valores = [45000, 52500, 35000, 40000]
+import matplotlib.pyplot as plt
 
-# Crear gráfico
+categorias = ['Ventas', 'IT', 'Recursos Humanos', 'Marketing']
+valores = [45000, 52000, 32000, 41000]
+
 plt.figure(figsize=(10, 6))
-plt.bar(categorias, valores, color=['red', 'blue', 'green', 'orange'])
-plt.ylabel('Salario Promedio')
-plt.title('Salario Promedio por Departamento')
-plt.xticks(rotation=45)
+plt.bar(categorias, valores, color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'])
+plt.title('Salario promedio por departamento')
+plt.ylabel('Salario')
+plt.xticks(rotation=20)
 plt.tight_layout()
 plt.show()
 ```
 
-**Histograma:**
+**Cuándo usarlo**:
+- Comparar categorías discretas
+- Ver diferencias entre grupos
+- Mostrar totales o promedios
+
+### 2.4.3 Histograma
+
+Se usa para visualizar la distribución de una variable continua.
 
 ```python
-# Datos
-datos = np.random.normal(100, 15, 1000)  # Media 100, desv est 15, 1000 valores
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1000 datos aleatorios con media 100 y desviación estándar 15
+notas = np.random.normal(100, 15, 1000)
 
 plt.figure(figsize=(10, 6))
-plt.hist(datos, bins=30, color='skyblue', edgecolor='black')
-plt.xlabel('Valores')
+plt.hist(notas, bins=30, color='skyblue', edgecolor='black')
+plt.title('Distribución de notas')
+plt.xlabel('Valor')
 plt.ylabel('Frecuencia')
-plt.title('Distribución Normal')
 plt.show()
 ```
 
-**Scatter plot (Diagrama de dispersión):**
+**Cuándo usarlo**:
+- Distribución de edades, ingresos, pesos, calificaciones
+- Identificar si los datos están sesgados o concentrados
+- Ver si la distribución es normal o no
+
+### 2.4.4 Diagrama de dispersión (scatter plot)
+
+Se usa para estudiar la relación entre dos variables numéricas.
 
 ```python
-# Datos
+import numpy as np
+import matplotlib.pyplot as plt
+
 x = np.random.randn(100)
 y = 2 * x + np.random.randn(100)
 
-plt.figure(figsize=(10, 6))
-plt.scatter(x, y, alpha=0.6, s=50, color='purple')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Scatter Plot: Relación entre X e Y')
+plt.figure(figsize=(8, 6))
+plt.scatter(x, y, color='purple', alpha=0.7)
+plt.title('Relación entre dos variables')
+plt.xlabel('Variable X')
+plt.ylabel('Variable Y')
 plt.grid(True, alpha=0.3)
 plt.show()
 ```
 
-**Box plot:**
+**Cuándo usarlo**:
+- Correlación entre variables
+- Buscar patrones o clusters
+- Analizar asociaciones en datos numéricos
+
+### 2.4.5 Boxplot
+
+Se usa para comparar distribuciones y detectar valores atípicos.
 
 ```python
-# Datos
-datos = [np.random.normal(0, std, 100) for std in range(1, 4)]
+import numpy as np
+import matplotlib.pyplot as plt
+
+grupo1 = np.random.normal(10, 2, 200)
+grupo2 = np.random.normal(12, 3, 200)
+grupo3 = np.random.normal(9, 4, 200)
 
 plt.figure(figsize=(10, 6))
-plt.boxplot(datos, labels=['Grupo 1', 'Grupo 2', 'Grupo 3'])
+plt.boxplot([grupo1, grupo2, grupo3], labels=['Grupo 1', 'Grupo 2', 'Grupo 3'])
+plt.title('Comparación de distribuciones')
 plt.ylabel('Valores')
-plt.title('Comparación de Distribuciones')
 plt.show()
 ```
 
-**Múltiples subgráficos:**
+**Cuándo usarlo**:
+- Comparar varias distribuciones
+- Detectar outliers
+- Ver mediana, cuartiles y rango intercuartílico
+
+### 2.4.6 Gráfico circular (pie chart)
+
+Se usa para mostrar proporciones de un total.
 
 ```python
+import matplotlib.pyplot as plt
+
+etiquetas = ['A', 'B', 'C', 'D']
+valores = [35, 25, 20, 20]
+
+plt.figure(figsize=(7, 7))
+plt.pie(valores, labels=etiquetas, autopct='%1.1f%%', startangle=90)
+plt.title('Participación por categoría')
+plt.axis('equal')
+plt.show()
+```
+
+**Cuándo usarlo**:
+- Porcentaje de participación
+- Distribución de un total
+- Datos categóricos con pocas clases
+
+> Nota: los gráficos circulares son útiles solo cuando hay pocas categorías y se busca mostrar proporciones generales. No son la mejor opción para comparar muchos grupos.
+
+### 2.4.7 Múltiples subgráficos
+
+Cuando se quiere comparar varios gráficos al mismo tiempo.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 10, 100)
+
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Subgráfico 1: Línea
-x = np.linspace(0, 10, 100)
-axes[0, 0].plot(x, np.sin(x))
+axes[0, 0].plot(x, np.sin(x), color='blue')
 axes[0, 0].set_title('Seno')
 
-# Subgráfico 2: Coseno
 axes[0, 1].plot(x, np.cos(x), color='red')
 axes[0, 1].set_title('Coseno')
 
-# Subgráfico 3: Parábola
 axes[1, 0].plot(x, x**2, color='green')
 axes[1, 0].set_title('Parábola')
 
-# Subgráfico 4: Scatter
-axes[1, 1].scatter(x, np.random.randn(100), alpha=0.6)
-axes[1, 1].set_title('Puntos Aleatorios')
+axes[1, 1].scatter(x, np.random.randn(100), color='purple', alpha=0.6)
+axes[1, 1].set_title('Dispersión aleatoria')
 
 plt.tight_layout()
 plt.show()
 ```
+
+**Cuándo usarlo**:
+- Comparar varios gráficos en una sola figura
+- Mostrar diferentes variables relacionadas con un mismo problema
+- Presentación de análisis exploratorio
+
+#### Buenas prácticas en Matplotlib
+
+1. **Usar títulos claros**: que expliquen exactamente lo que muestra el gráfico
+2. **Etiquetar ejes**: los lectores deben entender qué representa cada eje
+3. **Elegir colores con propósito**: no usar demasiados colores sin necesidad
+4. **Evitar gráficos sobrecargados**: la claridad es más importante que la complejidad
+5. **Usar leyendas solo si hace falta**
+6. **Guardar la figura con buena resolución**: `dpi=300` en reportes o presentación
+7. **Mantener la escala correcta**: evitar distorsionar la interpretación
+
+#### Recomendación práctica
+
+Si estás empezando, estos son los gráficos más útiles para aprender primero:
+- Gráfico de líneas
+- Gráfico de barras
+- Histograma
+- Scatter plot
+- Boxplot
+
+Con ellos puedes cubrir la mayoría de problemas de análisis exploratorio.
+
+#### Ejemplo completo con datos reales (sin Seaborn)
+
+```python
+import matplotlib.pyplot as plt
+
+# Datos del ejemplo
+meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul']
+ventas = [130, 150, 145, 175, 190, 210, 225]
+gastos = [80, 95, 100, 110, 125, 135, 140]
+
+plt.figure(figsize=(10, 6))
+plt.plot(meses, ventas, label='Ventas', color='blue', marker='o')
+plt.plot(meses, gastos, label='Gastos', color='red', marker='s')
+plt.title('Comparación de ventas y gastos')
+plt.xlabel('Mes')
+plt.ylabel('Monto')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+Este ejemplo muestra la idea central de Matplotlib: con pocas líneas de código puedes producir una visualización clara y profesional.
+
+#### Resumen
+
+Matplotlib es una herramienta fundamental para la visualización en Python. Desde gráficos sencillos hasta figuras complejas, permite controlar casi todos los detalles de la presentación. Si aprendes bien sus fundamentos, podrás crear la mayoría de visualizaciones que necesitas en análisis de datos sin depender de librerías adicionales.
 
 ---
 
